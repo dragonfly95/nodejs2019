@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+
+  .row
+    .col-md-6
+      ul
+      each val in users
+        li( data-userid=val.userid ) #{val.userid}
+    .col-md-6 
+      table 
+        tr
+          td 
+            input(type='button' name='btn-save' value='저장') 
+            input(type='button' name='btn-delete' value='삭제') 
+
+      table(border='1')
+        tr 
+          td userid 
+          td 
+            input(type='text' name='userid')
+        tr 
+          td userpw 
+          td 
+            input(type='password' name='userpw')
+
+  script(type='text/javascript' src='/javascripts/1.js')        
