@@ -9,3 +9,5 @@ react-native start
 cmd + m <-- remote debug 추가 
 
 윈도우에서 안되면 keyboard 입력을 취소시켜야 함 
+
+<img src="1.png" alt="asd"/>
