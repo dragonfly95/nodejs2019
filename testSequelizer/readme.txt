@@ -4,7 +4,7 @@
 
 # sequelize model:create --name post --attributes "title:string, writer:string"
 
-sequelize model:create --name reply --attributes "postId:integer, writer:string, content:text"
+#sequelize model:create --name reply --attributes "postId:integer, writer:string, content:text"
 
 # sequelize db:migrate
 
