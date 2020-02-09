@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/join" method="post")
+    label(for="user_id") 아이디 
+    input(type="text" id="user_id" name="user_id" value="admin1")
+    br
+    label(for="user_pwd") 패스워드  
+    input(type="password" id="user_pwd" name="user_pwd" value="123456")
+    br
+    label(for="user_nickname") 닉네임  
+    input(type="text" id="user_nickname" name="user_nickname" value="dragonfly95")
+    br
+    input(type="submit")
