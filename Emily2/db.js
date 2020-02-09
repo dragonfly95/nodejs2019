@@ -23,4 +23,17 @@ const getConn = function(callback) {
   });
 }
 
+
+
+function makeQuery(sql, param, callback) {
+  db((err,connection) => {
+    connection.query(sql, param, (err, rows) => {
+      connection.release(); // 연결세션 반환.
+      if (err) throw err;
+      callback(rows); // 결과는 rows에 담아 전송
+    });
+  });
+}
+
+
 module.exports = getConn;

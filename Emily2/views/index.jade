@@ -3,3 +3,37 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  script(src="javascripts/file.js")
+
+  <!-- table -->
+  form(name="form")
+    table
+      tr
+        td
+          label(for="menu_id") 메뉴 아이디: 
+          input(type="text" id="menu_id" name="menu_id" value="1")
+          br
+        td
+          label(for="menu_name") 메뉴 이름: 
+          input(type="text" id="menu_name" name="menu_name" value="2")
+          br
+        td
+          label(for="menu_price") 메뉴 가격: 
+          input(type="text" id="menu_price" name="menu_price" value="3")
+          br
+        td
+          label(for="cooking_time") 요리시간: 
+          input(type="text" id="cooking_time" name="cooking_time" value="4")
+          br
+        td
+          input(type="button" name="saveBtn" value="신규저장") 
+          input(type="button" name="modBtn" value="내용저장" style="display:none;") 
+  hr
+
+  table(border="1")
+    tr
+      td menuId
+      td menuName
+      td menuPrice
+      td cookingTime
+    tbody.list

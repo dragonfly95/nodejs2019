@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const db = require("./db");
+
 var bodyParser = require('body-parser');
 
 
@@ -27,51 +27,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+function middleLog(req, res, next) {
+  console.log('middle log');
+  next();
+}
+app.use(middleLog);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.get('/bbs', (req, res) => {
-  // Get Connection in Pool
-  db((err,connection) => {
-      connection.query("select * from tbl_menu", (err, rows) => {
-        connection.release(); // 연결세션 반환.
-        if (err) throw err;
-        return res.json({ data: rows }); // 결과는 rows에 담아 전송
-      });
-  });
+
+
+var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
+var upload = multer({ dest: 'uploads/' })
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    var ext = "png";
+    if(file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+      ext = "jpg";
+    }
+    cb(null, file.originalname+"."+ext);
+  }
 });
-app.post('/bbs', (req, res) => {
-
-  var sql = 'insert into tbl_menu (menu_name, menu_price, cooking_time) values (?,?,?)';
-  var param = [req.body.menu_name,req.body.menu_price,req.body.cooking_time];
-  db((err, connection) => {
-    connection.query(sql,param, (err, rows, fields) => {
-      connection.release();
-      if(err) throw err;
-      console.log(rows.insertId);
-      return res.json({ 'message': 'ok' });
-    })
-  });
-});
+var upload = multer({ storage: storage});
 
 
-app.post('/bbs2', (req, res) => {
-  var sql = 'insert into tbl_menu set ?';
-  var param  = req.body;
+app.use('/uploads', express.static('uploads'));
 
-  db((err, connection) => {
-    connection.query(sql, param, (err, rows, fields) => {
-      connection.release();
-      if(err) {
-        return res.json({ 'message': 'error' });
-        throw err;
-      }
-      console.log(rows.insertId);
-      return res.json({ 'message': 'ok' });
-    })
-  });
+app.get('/upload', (req, res) => {
+  res.render('upload', { title: 'file upload' });
 });
 
+app.post('/upload', upload.single('file1'), (req, res) => {
+  res.send('Uploaded! : '+req.file); // object를 리턴함
+  console.log(req.file); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
